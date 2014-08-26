@@ -37,5 +37,5 @@ void rotate(Mat* src, double angle, Mat* dst)
     Point2f pt(len/2., len/2.);
     Mat r = getRotationMatrix2D(pt, angle, 1.0);
 
-    warpAffine(*src, *dst, r, Size(len, len));
+    warpAffine(*src, *dst, r, Size(src->cols, src->rows)/*Size(len, len)*/);
 }
