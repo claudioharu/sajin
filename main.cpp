@@ -57,8 +57,8 @@ int main( int argc, char** argv )
 				
 				if(p.mse > mse)
 				{
-					p.point.x = j + img_query.cols/2; //Arrumar pra pegar soh do pedaço do target
-					p.point.y = i + img_query.rows/2; //Arrumar pra pegar soh do pedaço do target
+					p.point.x = j + img_query.cols/2; 
+					p.point.y = i + img_query.rows/2; 
 					p.angle = angl;
 					p.mse = mse;
 					if(debug == 1) std::cout << "BestPoint: " << p.point << "\n";
