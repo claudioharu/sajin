@@ -1,8 +1,6 @@
 #include "match.h"
 
-
 using namespace cv;
-pthread_mutex_t mutex2 = PTHREAD_MUTEX_INITIALIZER;
 
 double MSE(Mat* img_1, Mat* img_2)
 {
@@ -18,9 +16,7 @@ double MSE(Mat* img_1, Mat* img_2)
 		{
 			intensity1 = img_1->at<uchar>(Point(j,i));	
 			intensity2 = img_2->at<uchar>(Point(j,i));
-			//pthread_mutex_lock( &mutex2 );
 			val += pow(double(intensity1.val[0]-intensity2.val[0]), 2.0);	
-			//pthread_mutex_unlock( &mutex2 );	
 		}
 	}
 	
@@ -37,5 +33,5 @@ void rotate(Mat* src, double angle, Mat* dst)
     Point2f pt(len/2., len/2.);
     Mat r = getRotationMatrix2D(pt, angle, 1.0);
 
-    warpAffine(*src, *dst, r, Size(src->cols, src->rows)/*Size(len, len)*/);
+    warpAffine(*src, *dst, r, Size(src->cols, src->rows));
 }
