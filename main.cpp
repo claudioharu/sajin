@@ -6,9 +6,6 @@
  * 		   target_path	  [3]
  */		
 
-//char* query_path = "/home/junior/Desktop/imagens/query/minhaquery1.png";		
-//char* query_path = "/home/junior/Desktop/imagens/query/009_coca_obj.png";
-//char* target_path = "/home/junior/Desktop/imagens/target/sem_ruido/009_coca_tgt.png";
 
 
 int main( int argc, char** argv )

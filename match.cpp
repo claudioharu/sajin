@@ -36,8 +36,8 @@ void Rotate(Mat* src, double angle, Mat* dst)
     warpAffine(*src, *dst, r, Size(src->cols, src->rows));
 }
 
+//resize image
 void Resize(Mat* src, int w, int h, Mat* dst)
 {
-	Size size(w,h);//the dst image size,e.g.100x100
-	resize(*src, *dst, size);//resize image
+	resize(*src, *dst, Size(w,h));
 }
