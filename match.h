@@ -19,6 +19,6 @@ typedef struct BestPoint
 
 
 double MSE(cv::Mat* img_1, cv::Mat* img_2);
-void rotate(cv::Mat* src, double angle, cv::Mat* dst);
-
+void Rotate(cv::Mat* src, double angle, cv::Mat* dst);
+void Resize(cv::Mat* src, int w, int h, cv::Mat* dst);
 

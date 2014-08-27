@@ -52,9 +52,9 @@ int main( int argc, char** argv )
 			if(i + img_query.rows > img_target.rows) break;//h = img_target.rows - i;
 			else h = img_query.rows;
 			
-			for(double angl = 0.0; angl < 360.0; angl += 15.0)
+			for(double angl = 0.0; angl < 360.0; angl += 30.0)
 			{
-				rotate(&img_query, angl, &img_rot);
+				Rotate(&img_query, angl, &img_rot);
 				
 				if(debug == 1)std::cout << "\n\nrodei\n";
 			

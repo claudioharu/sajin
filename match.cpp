@@ -27,11 +27,17 @@ double MSE(Mat* img_1, Mat* img_2)
 	return mse;
 }
 
-void rotate(Mat* src, double angle, Mat* dst)
+void Rotate(Mat* src, double angle, Mat* dst)
 {
     int len = max(src->cols, src->rows);
     Point2f pt(len/2., len/2.);
     Mat r = getRotationMatrix2D(pt, angle, 1.0);
 
     warpAffine(*src, *dst, r, Size(src->cols, src->rows));
+}
+
+void Resize(Mat* src, int w, int h, Mat* dst)
+{
+	Size size(w,h);//the dst image size,e.g.100x100
+	resize(*src, *dst, size);//resize image
 }
