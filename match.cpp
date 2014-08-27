@@ -4,10 +4,10 @@ using namespace cv;
 
 double MSE(Mat* img_1, Mat* img_2)
 {
-	
+	/*
 	if(img_1->rows != img_2->rows) return Max;
 	if(img_1->cols != img_2->cols) return Max;
-	
+	*/
 	Scalar intensity1, intensity2;
 	double val = 0.0;
 	for(int i = 0; i < img_2->rows; i++)

@@ -1,5 +1,11 @@
 #include "match.h"
 
+/*
+ * Inputs: debug's flag   [1]
+ * 		   query_path 	  [2]
+ * 		   target_path	  [3]
+ */		
+
 //char* query_path = "/home/junior/Desktop/imagens/query/minhaquery1.png";		
 //char* query_path = "/home/junior/Desktop/imagens/query/009_coca_obj.png";
 //char* target_path = "/home/junior/Desktop/imagens/target/sem_ruido/009_coca_tgt.png";
@@ -34,22 +40,24 @@ int main( int argc, char** argv )
 	cv::imshow( "Img Target", img_target );                   // Show our image inside it.
 	*/
 	
-	int k = 0; 
 	int h, w;
-	for(double angl = 0.0; angl < 360.0; angl ++)
+	
+	for(int i  = 0; i < img_target.rows; i ++)
 	{
-		rotate(&img_query, angl, &img_rot);
-
-		for(int i  = 0; i < img_target.rows; i ++)
+		for(int j = 0; j < img_target.cols; j++)
 		{
-			for(int j = 0; j < img_target.cols; j++)
+					
+			if(j + img_query.cols > img_target.cols) break;//w = img_target.cols - j;
+			else w = img_query.cols;
+			if(i + img_query.rows > img_target.rows) break;//h = img_target.rows - i;
+			else h = img_query.rows;
+			
+			for(double angl = 0.0; angl < 360.0; angl += 15.0)
 			{
-						
-				if(j + img_rot.cols > img_target.cols) break;//w = img_target.cols - j;
-				else w = img_rot.cols;
-				if(i + img_rot.rows > img_target.rows) break;//h = img_target.rows - i;
-				else h = img_rot.rows;
+				rotate(&img_query, angl, &img_rot);
 				
+				if(debug == 1)std::cout << "\n\nrodei\n";
+			
 				img_of_interest = img_target(cv::Rect(j, i, w, h));
 				mse = MSE(&img_rot, &img_of_interest);
 				
@@ -68,8 +76,8 @@ int main( int argc, char** argv )
 				}
 			}
 		}
-		k++;
 	}
+
 	
 	
 	FILE *pFile;
