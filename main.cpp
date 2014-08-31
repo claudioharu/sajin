@@ -38,7 +38,8 @@ int main( int argc, char** argv )
 	*/
 	
 	int h, w;
-	
+	int newCols, newRows;
+	bool equal;
 	for(int i  = 0; i < img_target.rows; i ++)
 	{
 		for(int j = 0; j < img_target.cols; j++)
@@ -49,11 +50,11 @@ int main( int argc, char** argv )
 			if(i + img_query.rows > img_target.rows) break;//h = img_target.rows - i;
 			else h = img_query.rows;
 			
-			for(double angl = 0.0; angl < 360.0; angl += 30.0)
+			for(double angl = 0.0; angl < 360.0; angl += 15.0)
 			{
 				Rotate(&img_query, angl, &img_rot);
 				
-				if(debug == 1)std::cout << "\n\nrodei\n";
+				//if(debug == 1)std::cout << "\n\nrodei\n";
 			
 				img_of_interest = img_target(cv::Rect(j, i, w, h));
 				mse = MSE(&img_rot, &img_of_interest);
