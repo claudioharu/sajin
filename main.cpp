@@ -27,7 +27,7 @@ int main( int argc, char** argv )
 	//Load imgs
 	img_query = cv::imread(query_path,0);
 	img_target = cv::imread(target_path,0);
-	cv::Mat img_of_interest, img_rot;
+	cv::Mat img_of_interest, img_rot, img_resized;
 	
 	/*
 	cv::namedWindow( "Img Query", cv::WINDOW_NORMAL );// Create a window for display.
@@ -37,52 +37,74 @@ int main( int argc, char** argv )
 	cv::imshow( "Img Target", img_target );                   // Show our image inside it.
 	*/
 	
-	int h, w;
+	int h, w, i, j;
 	int newCols, newRows;
 	bool equal;
-	for(int i  = 0; i < img_target.rows; i ++)
-	{
-		for(int j = 0; j < img_target.cols; j++)
-		{
-					
-			if(j + img_query.cols > img_target.cols) break;//w = img_target.cols - j;
-			else w = img_query.cols;
-			if(i + img_query.rows > img_target.rows) break;//h = img_target.rows - i;
-			else h = img_query.rows;
-			
-			for(double angl = 0.0; angl < 360.0; angl += 15.0)
-			{
-				Rotate(&img_query, angl, &img_rot);
-				
-				//if(debug == 1)std::cout << "\n\nrodei\n";
-			
-				img_of_interest = img_target(cv::Rect(j, i, w, h));
-				mse = MSE(&img_rot, &img_of_interest);
-				
-				if(debug == 1) std::cout << "MSE: " << mse << "\n";
-				
-				if(p.mse > mse)
-				{
-					p.point.x = j + img_query.cols/2; 
-					p.point.y = i + img_query.rows/2; 
-					p.angle = angl;
-					p.mse = mse;
-					if(debug == 1) std::cout << "BestPoint: " << p.point << "\n";
-					if(debug == 1) std::cout << "MSE: " << p.mse << "\n";
-					if(debug == 1) std::cout << "Angle: " << p.angle << "\n";
+	int percent;
 
+								
+	for(percent = 5; percent <= 50; percent+=5)
+	{
+		Resize_image(&img_query, &img_resized, percent);
+				
+		if(debug == 1) std::cout << "\n\nredimensionei " << percent << "%\n";
+				
+		for(double angl = 0.0; angl < 360.0; angl += 30.0)
+		{
+			Rotate(&img_resized, angl, &img_rot);
+					
+			if(debug == 1)std::cout << "\n\nrodei\n";
+			
+			for(i = 0; i < img_target.rows; i ++)
+			{
+				for(j = 0; j < img_target.cols; j++)
+				{
+					//w = img_target.cols - j;
+					if(j + img_resized.cols > img_target.cols){if(debug == 1) std::cout << "Cols Out of tgt\n"; break;}
+					else w = img_resized.cols;
+					///h = img_target.rows - i;
+					if(i + img_resized.rows > img_target.rows){if(debug == 1) std::cout << "Rows Out of tgt\n"; break;}
+					else h = img_resized.rows;	
+					
+					img_of_interest = img_target(cv::Rect(j, i, w, h));
+					mse = MSE(&img_rot, &img_of_interest);
+				
+					if(debug == 1) std::cout << "MSE: " << mse << "\n";
+				
+					if(p.mse > mse)
+					{
+						p.point.x = j + img_query.cols/2; 
+						p.point.y = i + img_query.rows/2; 
+						p.percent = percent;
+						p.angle = angl;
+						p.mse = mse;
+						if(debug == 1) std::cout << "BestPoint: " << p.point << "\n";
+						if(debug == 1) std::cout << "MSE: " << p.mse << "\n";
+						if(debug == 1) std::cout << "Angle: " << p.angle << "\n";
+						if(debug == 1) std::cout << "Percent: " << percent << "\n";
+					}
+					
+					if(debug == 1){
+						std::cout << "\n[i,j] = " << i << "," << j << std::endl;
+						std::cout << percent << "%" << "," << angl << std::endl;
+					}		
 				}
 			}
 		}
 	}
 
 	
-	
 	FILE *pFile;
 	pFile = fopen("myfile.txt", "w");
 	if(debug == 1)	std::cout << "\n\n\nMSE: " << p.mse << " point: " << p.point << "\n";
 	fprintf(pFile,"MSE: %f, X: %d, Y: %d\n", p.mse, p.point.x, p.point.y);
 	fclose(pFile);
+	
+	// Draws rectangle on target image
+    	/*draw_rectangle(img_target, img_query.rows, img_query.cols, cv::Point(j, i), 5);
+    	cv::namedWindow( "target", CV_WINDOW_AUTOSIZE );
+    	cv::imshow("target", img_target);
+    	cv::waitKey(0);*/
 	
 	cv::waitKey(0);
 	

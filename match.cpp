@@ -41,3 +41,55 @@ void Resize(Mat* src, int w, int h, Mat* dst)
 {
 	resize(*src, *dst, Size(w,h));
 }
+
+//resize image
+void Resize_image(Mat* src, Mat* dst, int percent)
+{
+	// declare a destination Mat with correct size and channels
+	*dst = Mat((int)((src->rows*percent)/100), (int)((src->cols*percent)/100), CV_8UC1);
+
+	//use cv::resize to resize source to a destination image
+	resize(*src,  *dst,  dst->size(), 0, 0, CV_INTER_LINEAR);	
+}
+
+// draw rectangle
+void draw_rectangle(Mat target, int h, int w, Point corner, int thickness)
+{
+    int i, j, t;
+
+    for(t = 0; t < thickness; t++){
+
+        // Calculates the rectangles vertex
+        Point vertex1 = Point(corner.x-1, corner.y-1);
+        Point vertex2 = Point(vertex1.x + w + 1, vertex1.y);
+        Point vertex3 = Point(vertex2.x, vertex2.y + h + 1);
+        Point vertex4 = Point(vertex3.x - w -1, vertex3.y);
+
+        // Draw top line line
+        for(j=vertex1.x; j<vertex2.x; j++){
+            target.at<uchar>(vertex1.y, j) = 255;
+        }
+
+        // Bottom line
+        for(j = vertex3.x; j > vertex4.x; j--){
+            target.at<uchar>(vertex3.y, j) = 255;
+        }
+
+        // Right line
+        for(i = vertex2.y; i < vertex3.y; i++){
+            target.at<uchar>(i, vertex2.x) = 255;
+        }
+
+        // Left line
+        for(i = vertex4.y; i > vertex1.y; i--){
+            target.at<uchar>(i, vertex4.x) = 255;
+        }
+
+        corner.x--;
+        corner.y--;
+        h += 2;
+        w += 2;
+
+    }
+
+}
