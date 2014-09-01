@@ -58,32 +58,40 @@ void draw_rectangle(Mat target, int h, int w, Point corner, int thickness)
     int i, j, t;
 
     for(t = 0; t < thickness; t++){
+    
+    	//std::cout << "Entrei draw\n";
 
         // Calculates the rectangles vertex
         Point vertex1 = Point(corner.x-1, corner.y-1);
         Point vertex2 = Point(vertex1.x + w + 1, vertex1.y);
         Point vertex3 = Point(vertex2.x, vertex2.y + h + 1);
         Point vertex4 = Point(vertex3.x - w -1, vertex3.y);
+        
+        //std::cout << "Vertices\n";
 
         // Draw top line line
         for(j=vertex1.x; j<vertex2.x; j++){
             target.at<uchar>(vertex1.y, j) = 255;
         }
+        //std::cout << "Top\n";
 
         // Bottom line
         for(j = vertex3.x; j > vertex4.x; j--){
             target.at<uchar>(vertex3.y, j) = 255;
         }
+        //std::cout << "Bottom\n";
 
         // Right line
         for(i = vertex2.y; i < vertex3.y; i++){
             target.at<uchar>(i, vertex2.x) = 255;
         }
+        //std::cout << "Right\n";
 
         // Left line
         for(i = vertex4.y; i > vertex1.y; i--){
             target.at<uchar>(i, vertex4.x) = 255;
         }
+        //std::cout << "Left\n";
 
         corner.x--;
         corner.y--;

@@ -14,7 +14,7 @@ typedef struct BestPoint
 	double angle;
 	int percent;
 	cv::Point point;
-	
+	cv::Point center; /***GIT**/
 } BestPoint;
 
 
