@@ -79,7 +79,7 @@ int main( int argc, char** argv )
 						p.percent = percent;
 						p.angle = angl;
 						p.mse = mse;
-						if(debug == 1) std::cout << "BestPoint: " << p.point << "\n";
+						if(debug == 1) std::cout << "\nBestPoint: " << p.point << "\n";
 						if(debug == 1) std::cout << "Center: " << p.center << "\n";
 						if(debug == 1) std::cout << "MSE: " << p.mse << "\n";
 						if(debug == 1) std::cout << "Angle: " << p.angle << "\n";
