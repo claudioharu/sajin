@@ -29,21 +29,33 @@ int main( int argc, char** argv )
 	img_target = cv::imread(target_path,0);
 	cv::Mat img_of_interest, img_rot, img_resized;
 	
+	// Define size variation
+	int percent_lower, percent_upper;
+	define_thresholds(&img_target, &img_query, &percent_lower, &percent_upper);
+	if(debug == 1) std::cout << "Size varies from " << percent_lower << "% to " << percent_upper << "%\n";
+	/*
+	Resize_image(&img_query, &img_resized, percent_lower);
+	cv::namedWindow( "LOW", cv::WINDOW_AUTOSIZE);
+	cv::imshow( "LOW", img_resized );                   
+	
+	Resize_image(&img_query, &img_resized, percent_upper);
+	cv::namedWindow( "UPPER", cv::WINDOW_AUTOSIZE);
+	cv::imshow( "UPPER", img_resized );                  
+
+	cv::namedWindow( "Target", cv::WINDOW_AUTOSIZE);
+	cv::imshow( "Target", img_target );  */	
+	
 	/*
 	cv::namedWindow( "Img Query", cv::WINDOW_NORMAL );// Create a window for display.
 	cv::imshow( "Img Query", img_query );                   // Show our image inside it.
 
 	cv::namedWindow( "Img Target", cv::WINDOW_NORMAL );// Create a window for display.
-	cv::imshow( "Img Target", img_target );                   // Show our image inside it.
-	*/
+	cv::imshow( "Img Target", img_target );            // Show our image inside it.*/
+	
 	
 	int h, w, i, j;
-	int newCols, newRows;
-	bool equal;
-	int percent;
-
-								
-	for(percent = 5; percent <= 50; percent+=5)
+	int percent;							
+	for(percent = percent_lower; percent <= percent_upper; percent+=PERCENTAGE_VARIATION)
 	{
 		Resize_image(&img_query, &img_resized, percent);
 				
@@ -51,7 +63,6 @@ int main( int argc, char** argv )
 				
 		for(double angl = 0.0; angl < 360.0; angl += 30.0)
 		{
-			double angl = 0;
 			Rotate(&img_resized, angl, &img_rot);
 					
 			if(debug == 1)std::cout << "\n\nrodei\n";
@@ -79,7 +90,7 @@ int main( int argc, char** argv )
 						p.percent = percent;
 						p.angle = angl;
 						p.mse = mse;
-						if(debug == 1) std::cout << "\nBestPoint: " << p.point << "\n";
+						if(debug == 1) std::cout << "BestPoint: " << p.point << "\n";
 						if(debug == 1) std::cout << "Center: " << p.center << "\n";
 						if(debug == 1) std::cout << "MSE: " << p.mse << "\n";
 						if(debug == 1) std::cout << "Angle: " << p.angle << "\n";
@@ -95,7 +106,7 @@ int main( int argc, char** argv )
 			}
 		}
 	}
-
+	
 	
 	FILE *pFile;
 	pFile = fopen("myfile.txt", "w");
@@ -104,10 +115,11 @@ int main( int argc, char** argv )
 	fclose(pFile);
 	
 	// Draws rectangle on target image
-	/*draw_rectangle(img_target, img_resized.rows, img_resized.cols, cv::Point(p.point.x,p.point.y), 5);
-    	cv::namedWindow( "target", CV_WINDOW_NORMAL);
-    	cv::imshow("target", img_target);
-    	cv::waitKey(0);*/
+    	draw_rectangle(img_target, img_resized.rows, img_resized.cols, cv::Point(p.point.x,p.point.y), 5);
+    	if(debug ==1) std::cout << "Draw\n"; 
+    	cv::namedWindow( "Result", CV_WINDOW_NORMAL);
+    	cv::imshow("Result", img_target);
+    	cv::waitKey(0);
 	
 	cv::waitKey(0);
 	

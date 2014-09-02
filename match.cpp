@@ -101,3 +101,32 @@ void draw_rectangle(Mat target, int h, int w, Point corner, int thickness)
     }
 
 }
+
+void define_thresholds(Mat* img_target, Mat* img_query, int *percent_lower, int *percent_upper)
+{
+
+	int tgt_area = img_target->rows*img_target->cols;
+	double occupied_area = 0.00;
+	int percent = 0;
+
+	*percent_lower = 0; 
+	*percent_upper = 0;
+	while(occupied_area < MAXIMAL_OCCUPATION){
+	
+		occupied_area = (double) ( (img_query->rows*percent/100) * (img_query->cols*percent/100) * 100 )/tgt_area;
+		
+		if(occupied_area > MINIMAL_OCCUPATION && *percent_lower == 0) {
+			*percent_lower = percent;
+		}
+		
+		if(occupied_area > MAXIMAL_OCCUPATION) {
+			*percent_upper = percent - 5;
+			if(*percent_upper > 100) *percent_upper = 100;
+			return;
+		}
+		
+		percent+=5;	
+	};
+	
+	//std::cout << "\n\nLOW = " << *percent_lower << " " << "\nUPPER = " << *percent_upper << "\n\n";
+}
