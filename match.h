@@ -26,6 +26,7 @@ double MSE(cv::Mat* img_1, cv::Mat* img_2);
 void Rotate(cv::Mat* src, double angle, cv::Mat* dst);
 void Resize(cv::Mat* src, int w, int h, cv::Mat* dst);
 void draw_rectangle(cv::Mat target, int h, int w, cv::Point corner, int thickness);
+void Rotate_without_cropping(cv::Mat* src, double angle, cv::Mat* rot);
 void Resize_image(cv::Mat* src, cv::Mat* dst, int percent);
 void define_thresholds(cv::Mat* img_target, cv::Mat* img_query, int *percent_lower, int *percent_upper);
 

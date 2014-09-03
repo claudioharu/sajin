@@ -6,8 +6,6 @@
  * 		   target_path	  [3]
  */		
 
-
-
 int main( int argc, char** argv )
 {
 	//Debug's flag
@@ -54,18 +52,23 @@ int main( int argc, char** argv )
 	
 	
 	int h, w, i, j;
-	int percent;							
-	for(percent = percent_lower; percent <= percent_upper; percent+=PERCENTAGE_VARIATION)
+	int percent;	
+	double angl;						
+	for(angl = 0.0; angl < 360.0; angl += 30.0)
 	{
-		Resize_image(&img_query, &img_resized, percent);
+		//angl = 30.0;
+		Rotate_without_cropping(&img_query, angl, &img_rot);
+		//cv::imshow( "ROT", img_rot);
 				
-		if(debug == 1) std::cout << "\n\nredimensionei " << percent << "%\n";
+		if(debug == 1)std::cout << "\n\nrodei\n";
 				
-		for(double angl = 0.0; angl < 360.0; angl += 30.0)
+		for(percent = percent_lower; percent <= percent_upper; percent+=PERCENTAGE_VARIATION)
 		{
-			Rotate(&img_resized, angl, &img_rot);
+			//percent = 20;
+			Resize_image(&img_rot, &img_resized, percent);
+			//cv::imshow( "RES", img_resized);
 					
-			if(debug == 1)std::cout << "\n\nrodei\n";
+			if(debug == 1) std::cout << "\n\nredimensionei " << percent << "%\n";
 			
 			for(i = 0; i < img_target.rows; i ++)
 			{
@@ -79,7 +82,7 @@ int main( int argc, char** argv )
 					else h = img_resized.rows;	
 					
 					img_of_interest = img_target(cv::Rect(j, i, w, h));
-					mse = MSE(&img_rot, &img_of_interest);
+					mse = MSE(&img_resized, &img_of_interest);
 				
 					if(p.mse > mse)
 					{
@@ -114,8 +117,9 @@ int main( int argc, char** argv )
 	fprintf(pFile,"MSE: %f\nX: %d, Y: %d\ncenter X: %d, Y: %d\npercent: %d\n", p.mse, p.point.x, p.point.y, p.center.x, p.center.y, p.percent);
 	fclose(pFile);
 	
-	// Draws rectangle on target image
+	// Draws rectangle on target image	
     	draw_rectangle(img_target, img_resized.rows, img_resized.cols, cv::Point(p.point.x,p.point.y), 5);
+    	imwrite( "Result.png", img_target);
     	if(debug ==1) std::cout << "Draw\n"; 
     	cv::namedWindow( "Result", CV_WINDOW_NORMAL);
     	cv::imshow("Result", img_target);
