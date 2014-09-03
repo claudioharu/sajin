@@ -26,7 +26,7 @@ void Resize_image(Mat* src, Mat* dst, int percent)
 }
 
 
-// ./find_size image_obj.png img_target percent angl
+// ./find_size image_obj.png img_target angl percent
 int main( int argc, char** argv )
 {  
 	// Create an image 
@@ -34,10 +34,10 @@ int main( int argc, char** argv )
 	Mat img_target = imread(argv[2],0);
 
 	// Here we retrieve a percentage value to a integer
-	int percent = atoi(argv[3]);
+	int percent = atoi(argv[4]);
 	
 	// Here we retrieve a percentage value to a integer
-	double angle = atoi(argv[4]);
+	double angle = atoi(argv[3]);
 	
 	// declare a destination Mat with correct size and channels
 	Mat img_resized;
