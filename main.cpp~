@@ -35,7 +35,6 @@ int main( int argc, char** argv )
 	int h, w, i, j;
 	int percent;	
 	double angl;	
-	
 	// Angle variation loop					
 	for(angl = 0.0; angl < 360.0; angl += 30.0)
 	{

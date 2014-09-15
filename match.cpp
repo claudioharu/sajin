@@ -4,10 +4,6 @@ using namespace cv;
 
 double MSE(Mat* img_1, Mat* img_2)
 {
-	/*
-	if(img_1->rows != img_2->rows) return Max;
-	if(img_1->cols != img_2->cols) return Max;
-	*/
 	Scalar intensity1, intensity2;
 	double val = 0.0;
 	for(int i = 0; i < img_2->rows; i++)
@@ -20,26 +16,9 @@ double MSE(Mat* img_1, Mat* img_2)
 		}
 	}
 	
-	//std::cout << val << "\n";
-	//std::cout << (1.0/(img_1->rows*img_2->cols)) << "\n";
 	double mse = (1.0/(img_2->rows*img_2->cols))*val;
-	//std::cout << mse << "\n";
+
 	return mse;
-}
-
-void Rotate(Mat* src, double angle, Mat* dst)
-{
-    int len = max(src->cols, src->rows);
-    Point2f pt(len/2., len/2.);
-    Mat r = getRotationMatrix2D(pt, angle, 1.0);
-
-    warpAffine(*src, *dst, r, Size(src->cols, src->rows));
-}
-
-//resize image
-void Resize(Mat* src, int w, int h, Mat* dst)
-{
-	resize(*src, *dst, Size(w,h));
 }
 
 void Rotate_without_cropping(Mat* src, double angle, Mat* rot)
@@ -101,11 +80,8 @@ void Rotate_without_cropping(Mat* src, double angle, Mat* rot)
 
     	Mat ROI = frameRotated(bound_Rect);
     	ROI.copyTo(*rot);
-
-    	//imwrite("rotated.jpg", *rot);
 }
 
-//resize image
 void Resize_image(Mat* src, Mat* dst, int percent)
 {
 	// declare a destination Mat with correct size and channels
@@ -115,14 +91,11 @@ void Resize_image(Mat* src, Mat* dst, int percent)
 	resize(*src,  *dst,  dst->size(), 0, 0, CV_INTER_LINEAR);	
 }
 
-// draw rectangle
 void draw_rectangle(Mat target, int h, int w, Point corner, int thickness)
 {
     int i, j, t;
 
     for(t = 0; t < thickness; t++){
-    
-    	//std::cout << "Entrei draw\n";
 
         // Calculates the rectangles vertex
         Point vertex1 = Point(corner.x-1, corner.y-1);
@@ -130,31 +103,25 @@ void draw_rectangle(Mat target, int h, int w, Point corner, int thickness)
         Point vertex3 = Point(vertex2.x, vertex2.y + h + 1);
         Point vertex4 = Point(vertex3.x - w -1, vertex3.y);
         
-        //std::cout << "Vertices\n";
-
-        // Draw top line line
+        // Draw top line 
         for(j=vertex1.x; j<vertex2.x; j++){
             target.at<uchar>(vertex1.y, j) = 255;
         }
-        //std::cout << "Top\n";
 
         // Bottom line
         for(j = vertex3.x; j > vertex4.x; j--){
             target.at<uchar>(vertex3.y, j) = 255;
         }
-        //std::cout << "Bottom\n";
 
         // Right line
         for(i = vertex2.y; i < vertex3.y; i++){
             target.at<uchar>(i, vertex2.x) = 255;
         }
-        //std::cout << "Right\n";
 
         // Left line
         for(i = vertex4.y; i > vertex1.y; i--){
             target.at<uchar>(i, vertex4.x) = 255;
         }
-        //std::cout << "Left\n";
 
         corner.x--;
         corner.y--;
@@ -165,9 +132,9 @@ void draw_rectangle(Mat target, int h, int w, Point corner, int thickness)
 
 }
 
+// Define thresholds based on the query's minimal and maximal area occupation of target
 void define_thresholds(Mat* img_target, Mat* img_query, int *percent_lower, int *percent_upper)
 {
-
 	int tgt_area = img_target->rows*img_target->cols;
 	double occupied_area = 0.00;
 	int percent = 0;
@@ -190,6 +157,4 @@ void define_thresholds(Mat* img_target, Mat* img_query, int *percent_lower, int 
 		
 		percent+=5;	
 	};
-	
-	//std::cout << "\n\nLOW = " << *percent_lower << " " << "\nUPPER = " << *percent_upper << "\n\n";
 }
