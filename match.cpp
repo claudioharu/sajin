@@ -2,6 +2,7 @@
 
 using namespace cv;
 
+//Calculating the mse
 double MSE(Mat* img_1, Mat* img_2)
 {
 	Scalar intensity1, intensity2;
@@ -21,6 +22,7 @@ double MSE(Mat* img_1, Mat* img_2)
 	return mse;
 }
 
+//Rotating an image
 void Rotate_without_cropping(Mat* src, double angle, Mat* rot)
 {
 	Mat frame, frameRotated;
@@ -82,6 +84,7 @@ void Rotate_without_cropping(Mat* src, double angle, Mat* rot)
     	ROI.copyTo(*rot);
 }
 
+//Resizing an image
 void Resize_image(Mat* src, Mat* dst, int percent)
 {
 	// declare a destination Mat with correct size and channels
@@ -91,6 +94,7 @@ void Resize_image(Mat* src, Mat* dst, int percent)
 	resize(*src,  *dst,  dst->size(), 0, 0, CV_INTER_LINEAR);	
 }
 
+//Drawing a rectangle around of a spot
 void draw_rectangle(Mat target, int h, int w, Point corner, int thickness)
 {
     int i, j, t;
@@ -132,7 +136,7 @@ void draw_rectangle(Mat target, int h, int w, Point corner, int thickness)
 
 }
 
-// Define thresholds based on the query's minimal and maximal area occupation of target
+// Defining thresholds based on the query's minimal and maximal area occupation of target
 void define_thresholds(Mat* img_target, Mat* img_query, int *percent_lower, int *percent_upper)
 {
 	int tgt_area = img_target->rows*img_target->cols;
